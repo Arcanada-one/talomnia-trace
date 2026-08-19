@@ -111,19 +111,33 @@ origin-cert)
   ;;
 
 analytics)
-  acct=$(curl -s "${auth[@]}" "$API/accounts?per_page=1" \
-    | jqr 'r=d.get("result") or []; print(r[0]["id"] if r else "")')
-  [ -n "$acct" ] || fail "no account scope on token — enable Web Analytics needs operator"
+  # Account id arrives via env (the token cannot list /accounts — measured);
+  # RUM endpoints themselves accept it if the token carries the RUM scope.
+  acct="${CF_ACCOUNT_ID:-}"
+  if [ -z "$acct" ]; then
+    acct=$(curl -s "${auth[@]}" "$API/accounts?per_page=1" \
+      | jqr 'r=d.get("result") or []; print(r[0]["id"] if r else "")')
+  fi
+  [ -n "$acct" ] || fail "no account id available — pass CF_ACCOUNT_ID"
   echo "::add-mask::$acct"
   zid=$(zone_id); echo "::add-mask::$zid"
-  existing=$(curl -s "${auth[@]}" "$API/accounts/$acct/rum/site_info/list?per_page=50" \
-    | jqr 'r=(d.get("result") or []); print(next((s["site_tag"] for s in r if (s.get("zone_tag")=="'"$zid"'" or (s.get("ruleset") or {}).get("zone_tag")=="'"$zid"'")), ""))' || true)
+  plan=$(curl -s "${auth[@]}" "$API/zones?name=${ZONE_NAME}" \
+    | jqr 'r=d.get("result") or []; print(r[0]["plan"]["name"] if r else "?")')
+  echo "zone plan: $plan"
+  resp=$(curl -s "${auth[@]}" "$API/accounts/$acct/rum/site_info/list?per_page=100")
+  ok=$(echo "$resp" | jqr 'print(d.get("success"))')
+  if [ "$ok" != "True" ]; then echo "$resp" | jqr 'print("rum list FAIL:", d.get("errors"))'; exit 1; fi
+  existing=$(echo "$resp" | ZID="$zid" python3 -c 'import json,sys,os
+d=json.load(sys.stdin); z=os.environ["ZID"]
+print(next((s.get("site_tag","") for s in (d.get("result") or []) if s.get("zone_tag")==z or (s.get("ruleset") or {}).get("zone_tag")==z), ""))')
   if [ -n "$existing" ]; then
     echo "analytics: already enabled for zone"
   else
-    ok=$(curl -s -X POST "${auth[@]}" -H 'Content-Type: application/json' \
+    resp=$(curl -s -X POST "${auth[@]}" -H 'Content-Type: application/json' \
       "$API/accounts/$acct/rum/site_info" \
-      --data "{\"zone_tag\":\"$zid\",\"auto_install\":true}" | jqr 'print(d["success"])')
+      --data "{\"zone_tag\":\"$zid\",\"auto_install\":true}")
+    ok=$(echo "$resp" | jqr 'print(d.get("success"))')
+    if [ "$ok" != "True" ]; then echo "$resp" | jqr 'print("rum create FAIL:", d.get("errors"))'; exit 1; fi
     echo "analytics: created ok=$ok (auto_install beacon)"
   fi
   ;;
