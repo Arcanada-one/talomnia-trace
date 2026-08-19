@@ -104,7 +104,7 @@ plant_and_push TRACKER  "$plant_tracker"
 plant_and_push CRED     "$plant_cred"
 
 # ---- recorded defect #1: never the allowlist-skipping --dir form -------------
-if grep -qE -- '--dir' "$ROOT/.githooks/pre-push"; then
+if sed 's/[[:space:]]*#.*$//' "$ROOT/.githooks/pre-push" | grep -qE -- '--dir'; then
   bad "hook must not use the --dir checker form"
 else
   ok "hook never uses the --dir checker form"
