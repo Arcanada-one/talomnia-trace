@@ -1,0 +1,4 @@
+# Sanitization allowlist — reviewed exceptions (SANITIZATION.md § 3).
+# Format: <path>:<class>:<expiry YYYY-MM-DD>:<justification>
+# An expired entry turns the gate red until renewed by explicit review.
+SECURITY.md:EMAIL:2026-11-17:public security contact address mandated by the ecosystem security policy

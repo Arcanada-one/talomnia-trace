@@ -1,0 +1,73 @@
+# Sanitization gate — the blocking CI check mandated by SANITIZATION.md.
+# Runs on EVERY push to EVERY branch and on every PR. Required status on main.
+#
+# Order matters: the positive control runs first. If either detector layer fails to
+# go red on planted findings (e.g. a scanner that loaded zero rules), the gate fails
+# itself — a gate that cannot fail proves nothing.
+name: sanitization-gate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  GITLEAKS_VERSION: 8.30.1
+  GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+
+jobs:
+  sanitize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0 # Layer A scans full history, not the tip tree
+
+      - name: Install pinned gitleaks (checksum-verified)
+        run: |
+          curl -sSL -o /tmp/gitleaks.tar.gz \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  /tmp/gitleaks.tar.gz" | sha256sum -c -
+          tar -C /tmp -xzf /tmp/gitleaks.tar.gz gitleaks
+          /tmp/gitleaks version
+
+      - name: "Positive control — Layer B must detect every planted class"
+        run: bash scripts/sanitization-check.sh --selftest
+
+      - name: "Positive control — Layer A must detect planted findings"
+        run: |
+          plant="$(mktemp -d)"
+          # Values are generated per run: low-entropy textbook examples are ignored
+          # by secret scanners by design and would silently test nothing.
+          tok="$(tr -dc 'A-Za-z0-9' </dev/urandom | head -c 36)"
+          printf 'token = "ghp_%s"\n' "$tok" > "$plant/cred.txt"
+          printf 'peer at %s.%s.%s.%s\n' 10 "$((RANDOM % 256))" "$((RANDOM % 256))" "$((RANDOM % 256))" > "$plant/ip.txt"
+          printf 'log under %s%s/build.log\n' '/home/' "planteduser$((RANDOM % 100))" > "$plant/path.txt"
+          # A1: built-in default rules must catch the credential
+          if /tmp/gitleaks dir "$plant/cred.txt" --no-banner -f json -r /tmp/plant-a1.json; then
+            echo "FATAL: gitleaks default rules stayed green on a planted token (zero-rules failure mode)"
+            exit 1
+          fi
+          # A2: infra rules must catch the internal IP and the absolute path
+          if /tmp/gitleaks dir "$plant" --config .gitleaks.infra.toml --no-banner \
+               -f json -r /tmp/plant-a2.json; then
+            echo "FATAL: gitleaks infra rules stayed green on planted findings"
+            exit 1
+          fi
+          a1="$(jq length /tmp/plant-a1.json)"
+          a2rules="$(jq -r '[.[].RuleID] | unique | join(",")' /tmp/plant-a2.json)"
+          echo "positive control OK: A1 hits=${a1}; A2 rules fired: ${a2rules}"
+          test "$a1" -ge 1
+          jq -e '[.[].RuleID] | (index("talomnia-internal-ipv4") != null) and (index("talomnia-internal-abs-path") != null)' \
+            /tmp/plant-a2.json >/dev/null
+
+      - name: "Layer A1 — gitleaks default rules (secrets), full git history"
+        run: /tmp/gitleaks git . --no-banner --redact
+
+      - name: "Layer A2 — gitleaks infra rules, full git history"
+        run: /tmp/gitleaks git . --config .gitleaks.infra.toml --no-banner --redact
+
+      - name: "Layer B — project denylist, working tree"
+        run: bash scripts/sanitization-check.sh

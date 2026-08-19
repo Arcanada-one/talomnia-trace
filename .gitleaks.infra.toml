@@ -1,0 +1,32 @@
+# Layer A2 configuration of the sanitization gate (see SANITIZATION.md).
+# Infrastructure-shaped § 3.3 classes, scanned across full git history.
+#
+# Deliberately does NOT extend the default gitleaks ruleset: the default config's
+# global allowlist suppresses path-shaped findings (measured 2026-08-19 — the
+# abs-path rule below never fired under `extend.useDefault = true`). Secrets are
+# covered by a separate Layer A1 run with the built-in default rules.
+
+title = "talomnia-trace sanitization gate — Layer A2 (infra patterns)"
+
+[[rules]]
+id = "talomnia-internal-ipv4"
+description = "IPv4 literal in a private/CGNAT range (internal contour leak)"
+regex = '''\b(10(\.[0-9]{1,3}){3}|192\.168(\.[0-9]{1,3}){2}|172\.(1[6-9]|2[0-9]|3[01])(\.[0-9]{1,3}){2}|100\.(6[4-9]|[7-9][0-9]|1[01][0-9]|12[0-7])(\.[0-9]{1,3}){2})\b'''
+
+[[rules]]
+id = "talomnia-internal-abs-path"
+description = "Absolute filesystem path of an operator/fleet machine"
+regex = '''(/home/[a-z][a-z0-9_-]+/|/Users/[A-Za-z][A-Za-z0-9_-]+/)'''
+
+[[rules]]
+id = "talomnia-mesh-hostname"
+description = "Internal mesh / fleet hostname"
+regex = '''(arcana-[a-z]+|[a-z0-9-]+\.ts\.net)'''
+
+[allowlist]
+description = "Detector definition files contain the patterns themselves; governed by PR review (SANITIZATION.md § 3)."
+paths = [
+  '''\.gitleaks\.infra\.toml''',
+  '''scripts/sanitization-check\.sh''',
+  '''\.sanitization-allowlist''',
+]
