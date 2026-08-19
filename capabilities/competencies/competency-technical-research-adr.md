@@ -4,6 +4,8 @@ type: competency
 source-version: 0.1.4
 origin: created-in-arcanada
 projected: 2026-08-19
+graph-status: deliberate-gap
+graph-gap-record: gap-tal-competency-technical-research-adr
 relations:
   - rel: uses
     target: tal-skill-adr-authoring
@@ -16,6 +18,12 @@ relations:
 ---
 
 # Competency — Technical Research with ADR
+
+> **Graph status.** `competency` is not one of the seven managed ontology types;
+> in the Professional Knowledge Graph this artifact is deliberately represented as
+> the Gap record `gap-tal-competency-technical-research-adr` (ADR-PKG-002), not as a revision.
+> This projection derives from the markdown source artifact; the executable ability
+> lives in the graph through the role, skill and blueprint revisions it references.
 
 Ability to run the Research → Recommendation → ADR cycle for technology
 choices — stack, database, analytics — with inventory-first reuse of

@@ -4,6 +4,8 @@ type: competency
 source-version: 0.1.4
 origin: created-in-talomnia
 projected: 2026-08-19
+graph-status: deliberate-gap
+graph-gap-record: gap-tal-competency-design-systems
 relations:
   - rel: uses
     target: tal-skill-design-research
@@ -16,6 +18,14 @@ relations:
 ---
 
 # Competency — Design Systems
+
+> **Graph status.** `competency` is not one of the seven managed ontology types;
+> in the Professional Knowledge Graph this artifact is deliberately represented as
+> the Gap record `gap-tal-competency-design-systems` (ADR-PKG-002), not as a revision.
+> This projection derives from the markdown source artifact; the executable ability
+> lives in the graph through the role, skill and blueprint revisions it references. As of TALO-0028 (issue #31) the executable design ability is carried by the
+> evolved graph revisions `tal-role-design-lead@r2`, `tal-skill-design-research@r2`
+> and `tal-blueprint-design-system-atlas@r2`, each with external-source provenance.
 
 Ability to research, define and ship a design system — concept, style guide,
 components, page templates, responsive and accessibility rules — as a
