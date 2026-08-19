@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+# Pre-push sanitization gate for the PUBLIC showcase repository (issue #32).
+#
+# Why this exists: the CI gate (.github/workflows/sanitization-gate.yml) runs
+# AFTER the push. By the time it goes red the bytes are already on GitHub, and a
+# secret that reached a public remote is not un-leaked by a later commit, a force
+# push or a history rewrite. This hook is the layer that runs while the leak is
+# still local and still preventable.
+#
+# Wiring: this file is tracked in .githooks/ and adopted by every clone and
+# worktree through the single setup step documented in SANITIZATION.md § 2.1:
+#
+#     git config core.hooksPath .githooks
+#
+# It refuses to pass silently: if the checker is missing, unreadable, or fails its
+# own self-test, the push is REFUSED rather than allowed. A gate that cannot fail
+# proves nothing, so a gate that cannot run must not pretend it passed.
+#
+# Invocation note (recorded defect #1): the checker is called in its BARE form,
+# exactly as CI calls it in "Layer B — project denylist, working tree". The --dir
+# form skips the allowlist and floods on the detector's own pattern definitions,
+# so using it here would train everyone to bypass the hook.
+#
+# Status note (recorded defect #2): every exit status is read directly from the
+# command substitution, never through a pipe, so a real failure cannot be
+# laundered into 0.
+#
+# Scope limits (stated honestly, SANITIZATION.md § 2.1): the bare checker scans
+# git-tracked files — an untracked file is invisible here (correct for pre-push:
+# a push publishes only tracked content, but never rely on this hook as an editor
+# check). And `git push --no-verify` skips this hook entirely; that cannot be
+# technically prevented on the client side. CI remains the backstop that cannot
+# be bypassed locally.
+set -uo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)" || exit 1
+cd "$repo_root" || exit 1
+checker="scripts/sanitization-check.sh"
+
+die() { printf '\nPUSH REFUSED — %s\n\n' "$1" >&2; exit 1; }
+
+[ -r "$checker" ] || die "sanitization checker not found or unreadable at $checker.
+The public repository must never be pushed without its content gate."
+
+# Positive control first. If the detector cannot go red on planted findings, it
+# cannot be trusted to go red on a real one.
+out="$(bash "$checker" --selftest 2>&1)"; rc=$?
+if [ "$rc" -ne 0 ]; then
+  printf '%s\n' "$out" | sed 's/^/  /' >&2
+  die "the sanitization detector failed its own self-test (exit $rc).
+It cannot be relied on to catch a real finding, so the push is refused."
+fi
+
+# Scan the working tree that is about to be published (bare form: tracked files,
+# allowlist honoured — the same call CI makes in Layer B).
+out="$(bash "$checker" 2>&1)"; rc=$?
+if [ "$rc" -ne 0 ]; then
+  echo >&2
+  echo "  Findings in the content about to be pushed to a PUBLIC repository:" >&2
+  printf '%s\n' "$out" | sed 's/^/  /' >&2
+  die "sanitization findings above must be resolved before pushing (exit $rc).
+Fix the content. Do not bypass with --no-verify: what reaches a public remote
+cannot be cleaned up afterwards."
+fi
+
+echo "sanitization gate: clean (self-test passed, no findings)" >&2
+exit 0

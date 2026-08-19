@@ -71,3 +71,10 @@ jobs:
 
       - name: "Layer B — project denylist, working tree"
         run: bash scripts/sanitization-check.sh
+
+      - name: "Pre-push gate — sandbox proof: red per class, green on clean tree"
+        # The local pre-push layer (.githooks/pre-push, issue #32) must be shown
+        # able to fail on every run, same discipline as the positive controls
+        # above: a real push in a sandbox clone per detector class (refused) and
+        # on a clean tree (allowed), plus loud-absence and defect-class guards.
+        run: bash scripts/test-prepush-gate.sh
