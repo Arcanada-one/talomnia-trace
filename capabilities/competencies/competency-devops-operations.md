@@ -54,3 +54,15 @@ channel someone reads — a monitor with no delivery is not a monitor.
 - **L3 — resilience proven**: restore tested, alert delivery tested, the
   integrations-and-infrastructure acceptance gate green. The infrastructure
   lane requires L3.
+
+## Provenance
+
+Sanitized one-way projection of the private knowledge artifact
+`tal-competency-devops-operations` (source version 0.1.4, promoted-source
+`content_digest: sha256:56c61aad86937b82bc4ba54f61412f29d2d394f3020588216efb00660e3997db`),
+published at the `public-sanitized` lifecycle status reached through the
+four-stage promotion trail fixed in the private repository's Git history and
+its lifecycle evidence record. Validated-stage basis: exercised in real work by TALO-0012 and again by TALO-0025 on the production deploy path. Provenance trail completed under contract
+K_id `sha256:8915c31fb9cb35dd30c2305d00562cb21ec6965f160b6680e81e2ef1265f653c`
+(issue #9). The private artifact is the source of truth; this file is never
+edited in place.

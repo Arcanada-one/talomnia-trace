@@ -45,3 +45,15 @@ stay labeled as hypotheses rather than presented as fact.
 - **L3 — pricing recommendation** defensible to an operator or investor
   audience. The market-research lane requires L2 with an L3 pricing
   recommendation attached.
+
+## Provenance
+
+Sanitized one-way projection of the private knowledge artifact
+`tal-competency-market-research` (source version 0.1.4, promoted-source
+`content_digest: sha256:46158eb4a5418a4bc81a6df433e7062869681730d46d0d4ea5b622b8c29faf09`),
+published at the `public-sanitized` lifecycle status reached through the
+four-stage promotion trail fixed in the private repository's Git history and
+its lifecycle evidence record. Validated-stage basis: exercised in real work by TALO-0006 (decision-grade market study with an attached pricing recommendation). Provenance trail completed under contract
+K_id `sha256:8915c31fb9cb35dd30c2305d00562cb21ec6965f160b6680e81e2ef1265f653c`
+(issue #9). The private artifact is the source of truth; this file is never
+edited in place.

@@ -44,3 +44,15 @@ consultation intents.
 - **L3 — contract-guarded**: contract tests wired into CI and blocking, with
   idempotency and the audit log confirmed by a test rather than a
   declaration. The integration lane requires L3.
+
+## Provenance
+
+Sanitized one-way projection of the private knowledge artifact
+`tal-competency-integration-engineering` (source version 0.1.4, promoted-source
+`content_digest: sha256:94062c1fa21bf9f37807525a7e1ff6962c0bfbf1445bfb0ada1a126660d361a4`),
+published at the `public-sanitized` lifecycle status reached through the
+four-stage promotion trail fixed in the private repository's Git history and
+its lifecycle evidence record. Validated-stage basis: exercised in real work by TALO-0011 (merged sender-side integration with contract-parity tests and evidence-decided idempotency). Provenance trail completed under contract
+K_id `sha256:8915c31fb9cb35dd30c2305d00562cb21ec6965f160b6680e81e2ef1265f653c`
+(issue #9). The private artifact is the source of truth; this file is never
+edited in place.

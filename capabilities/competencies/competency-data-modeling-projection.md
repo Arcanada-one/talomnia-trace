@@ -48,3 +48,15 @@ projection.
   filtering.
 - **L3 — mutation-verified**: deleting a source record demonstrably changes
   what a page shows. The data-layer lane requires L3.
+
+## Provenance
+
+Sanitized one-way projection of the private knowledge artifact
+`tal-competency-data-modeling-projection` (source version 0.1.4, promoted-source
+`content_digest: sha256:fb059564ace40d372c07a7cccaeb1be6c9291b72007d1e1037ae5fa66885451c`),
+published at the `public-sanitized` lifecycle status reached through the
+four-stage promotion trail fixed in the private repository's Git history and
+its lifecycle evidence record. Validated-stage basis: exercised in real work by TALO-0009, outcome confirmed by the TALO-0012 consumer of its migrations checklist. Provenance trail completed under contract
+K_id `sha256:8915c31fb9cb35dd30c2305d00562cb21ec6965f160b6680e81e2ef1265f653c`
+(issue #9). The private artifact is the source of truth; this file is never
+edited in place.

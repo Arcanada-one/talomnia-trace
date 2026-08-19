@@ -45,3 +45,15 @@ hreflang), and CDN-cached public pages while forms stay uncached.
 - **L3 — full launch**: server-rendered site, forms, integrations, caching,
   and the site acceptance-criteria gate green. A production launch requires
   L3.
+
+## Provenance
+
+Sanitized one-way projection of the private knowledge artifact
+`tal-competency-web-fullstack-delivery` (source version 0.1.4, promoted-source
+`content_digest: sha256:a43528940f4601c91e52f71d2d7861dc93db2249a86c24c8dca2d341a93d5958`),
+published at the `public-sanitized` lifecycle status reached through the
+four-stage promotion trail fixed in the private repository's Git history and
+its lifecycle evidence record. Validated-stage basis: exercised in real work by TALO-0010 on the stack TALO-0009 and TALO-0012 stood up. Provenance trail completed under contract
+K_id `sha256:8915c31fb9cb35dd30c2305d00562cb21ec6965f160b6680e81e2ef1265f653c`
+(issue #9). The private artifact is the source of truth; this file is never
+edited in place.
