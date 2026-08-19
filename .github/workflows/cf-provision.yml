@@ -1,0 +1,46 @@
+name: cf-provision
+
+# TALO-0012 (TZ § 8): edge provisioning for the talomnia.com zone.
+# Lives in this public repo because the org-level Cloudflare token is only
+# delivered to public-repo workflows (measured: it arrives empty in the
+# private repos). Dispatch-only; prints idempotency state, never values.
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: what to provision
+        required: true
+        type: choice
+        options: [verify, dns, tls-settings, origin-cert, analytics, purge]
+      wrap_pubkey_b64:
+        description: base64 PEM RSA public key (origin-cert only) — the TLS private key is encrypted to it
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cf-provision
+  cancel-in-progress: false
+
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Run action
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          ORIGIN_IP: ${{ secrets.TALOMNIA_ORIGIN_IP }}
+          ZONE_NAME: talomnia.com
+          ACTION: ${{ inputs.action }}
+          WRAP_PUBKEY_B64: ${{ inputs.wrap_pubkey_b64 }}
+        run: bash scripts/cf-provision.sh
+      - name: Upload wrapped origin material
+        if: inputs.action == 'origin-cert'
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: origin-cert-wrapped
+          path: out/
+          retention-days: 1
