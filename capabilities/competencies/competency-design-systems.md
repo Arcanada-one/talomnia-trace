@@ -45,3 +45,15 @@ repository.
 - **L2 — component system** with usage rules and accessibility annotations.
 - **L3 — full design system** as catalog entities with page templates and
   verifiable acceptance criteria. The design lane requires L3.
+
+## Provenance
+
+Sanitized one-way projection of the private knowledge artifact
+`tal-competency-design-systems` (source version 0.1.4, promoted-source
+`content_digest: sha256:31e34caba1087841499310362e6786d9b1cdc204e110352f1c59f4b7d6b70121`),
+published at the `public-sanitized` lifecycle status reached through the
+four-stage promotion trail fixed in the private repository's Git history and
+its lifecycle evidence record. Validated-stage basis: authored and bootstrap-validated in TALO-0008, re-exercised by the TALO-0010 site delivery. Provenance trail completed under contract
+K_id `sha256:8915c31fb9cb35dd30c2305d00562cb21ec6965f160b6680e81e2ef1265f653c`
+(issue #9). The private artifact is the source of truth; this file is never
+edited in place.

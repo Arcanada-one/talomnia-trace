@@ -47,3 +47,15 @@ necessity.
 - **L3 — portfolio decision**: interacting choices (stack, database,
   analytics) resolved as a consistent set. The technical-research lane
   requires L3.
+
+## Provenance
+
+Sanitized one-way projection of the private knowledge artifact
+`tal-competency-technical-research-adr` (source version 0.1.4, promoted-source
+`content_digest: sha256:03f167a380f2d6103390caebd704baf17c790f016b3f9475b4c8a613ecd6a69b`),
+published at the `public-sanitized` lifecycle status reached through the
+four-stage promotion trail fixed in the private repository's Git history and
+its lifecycle evidence record. Validated-stage basis: exercised in real work by TALO-0007 (ADR set fixed before implementation started). Provenance trail completed under contract
+K_id `sha256:8915c31fb9cb35dd30c2305d00562cb21ec6965f160b6680e81e2ef1265f653c`
+(issue #9). The private artifact is the source of truth; this file is never
+edited in place.
