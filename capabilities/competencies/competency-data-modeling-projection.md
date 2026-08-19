@@ -4,6 +4,8 @@ type: competency
 source-version: 0.1.4
 origin: created-in-arcanada
 projected: 2026-08-19
+graph-status: deliberate-gap
+graph-gap-record: gap-tal-competency-data-modeling-projection
 relations:
   - rel: uses
     target: tal-competency-technical-research-adr
@@ -14,6 +16,12 @@ relations:
 ---
 
 # Competency — Data Modeling and Knowledge Projection
+
+> **Graph status.** `competency` is not one of the seven managed ontology types;
+> in the Professional Knowledge Graph this artifact is deliberately represented as
+> the Gap record `gap-tal-competency-data-modeling-projection` (ADR-PKG-002), not as a revision.
+> This projection derives from the markdown source artifact; the executable ability
+> lives in the graph through the role, skill and blueprint revisions it references.
 
 Ability to design a project's data layer — a graph-capable catalog schema,
 workflow/research/ledger entities, request-data minimization — and a one-way,

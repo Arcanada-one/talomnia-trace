@@ -21,6 +21,15 @@ Provenance contract:
   `source-version`, and `projected` (date).
 - The projection passes the same CI sanitization gate as everything else
   ([SANITIZATION.md](../SANITIZATION.md)).
+- **Competencies carry an explicit graph status.** The `competency` type is not
+  one of the seven managed ontology types of the Professional Knowledge Graph:
+  each competency exists in the graph as a deliberate Gap record (ADR-PKG-002),
+  while the executable ability lives in the role, skill and blueprint revisions
+  the competency references. Every `competencies/` projection declares this in
+  its frontmatter (`graph-status: deliberate-gap`, `graph-gap-record`) rather
+  than implying a graph revision that does not exist — traceability is the
+  product, so provenance claims state what the graph actually records
+  (issue #31, TALO-0028).
 
 ## Published and withheld (issue #35 accounting)
 

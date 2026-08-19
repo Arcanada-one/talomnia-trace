@@ -4,6 +4,8 @@ type: competency
 source-version: 0.1.4
 origin: created-in-arcanada
 projected: 2026-08-19
+graph-status: deliberate-gap
+graph-gap-record: gap-tal-competency-bilingual-content
 relations:
   - rel: uses
     target: datarim-skill-writing
@@ -16,6 +18,12 @@ relations:
 ---
 
 # Competency — Bilingual Content
+
+> **Graph status.** `competency` is not one of the seven managed ontology types;
+> in the Professional Knowledge Graph this artifact is deliberately represented as
+> the Gap record `gap-tal-competency-bilingual-content` (ADR-PKG-002), not as a revision.
+> This projection derives from the markdown source artifact; the executable ability
+> lives in the graph through the role, skill and blueprint revisions it references.
 
 Ability to produce and maintain RU/EN content with full parity and a single
 glossary-backed terminology across site copy, investor documents and research
