@@ -75,7 +75,10 @@ plant_host='deployed via node arcana'; plant_host+='-plantbox'
 plant_mail='contact planted.person'; plant_mail+='@'; plant_mail+='example-corp.com'
 plant_phone='call +'; plant_phone+='1 (555) 014-2668 after hours'
 plant_tracker='tracked internally as INFRA'; plant_tracker+='-9999'
-plant_cred="token ghp_$(tr -dc 'A-Za-z0-9' </dev/urandom | head -c 36)"
+# NB: no `tr </dev/urandom | head` here — under `set -o pipefail` the infinite
+# reader dies of SIGPIPE (141) and silently kills the whole test. od reads a
+# finite 18 bytes -> exactly 36 hex chars, no pipe against an infinite source.
+plant_cred="token ghp_$(od -An -tx1 -N18 /dev/urandom | tr -d ' \n')"
 
 plant_and_push() { # class content
   local class="$1" content="$2" rc=0 out
