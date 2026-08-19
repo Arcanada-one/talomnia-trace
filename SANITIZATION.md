@@ -41,6 +41,53 @@ Two independent detector layers run in CI:
 Any finding fails the check. The check is a **required status** on `main`
 (admin bypass disabled): a red gate blocks the merge, and therefore publication.
 
+### 2.1 Pre-push layer — the gate that runs BEFORE the bytes are public
+
+CI runs **after** the push. For a public repository that ordering is the wrong
+way round: a secret that reached a public remote is not un-leaked by a revert or
+a history rewrite — it is already fetchable, already in forks, already in caches.
+So the same Layer B checker also runs **locally, before every push**, as a
+version-controlled hook: [`.githooks/pre-push`](.githooks/pre-push).
+
+**Setup — one command, run once per clone (non-optional):**
+
+```
+git config core.hooksPath .githooks
+```
+
+`core.hooksPath` is repository configuration shared by all linked worktrees, and
+the relative value resolves inside each worktree's checkout — wiring the clone
+once covers every worktree.
+
+**Absence is loud.** A clone without that config has no local gate, so
+[`scripts/check-gate-wiring.sh`](scripts/check-gate-wiring.sh) verifies the
+wiring (exit 1 with the setup command when absent), and every **local** run of
+`scripts/sanitization-check.sh` performs the same wiring check before scanning —
+an unwired clone cannot even get a green local scan. In CI (`GITHUB_ACTIONS`)
+the wiring check is skipped: CI checkouts are never wired, and there the CI gate
+itself is the backstop.
+
+The hook refuses to pass silently — a missing or unreadable checker, or a failed
+detector self-test, refuses the push. It calls the checker in its **bare,
+allowlist-honouring form** (never `--dir`, which skips the allowlist and floods
+on the detector's own pattern definitions) and reads the exit status **directly
+from the command, never through a pipe** — both defects were found by testing
+the interim hook and are guarded by
+[`scripts/test-prepush-gate.sh`](scripts/test-prepush-gate.sh), which CI runs on
+every push: a sandbox clone performs a real refused push per detector class and
+a real allowed push on a clean tree.
+
+**Stated limits, honestly:**
+
+- The bare checker scans **git-tracked files**: an untracked file is invisible
+  to the pre-push layer. That is correct for a push gate (a push publishes only
+  tracked content), but this hook must never be relied on as a pre-commit or
+  editor check.
+- `git push --no-verify` skips the hook, and that **cannot be technically
+  prevented** on the client side. The CI gate remains the backstop that cannot
+  be bypassed locally — the pre-push layer is defence in depth, not a
+  replacement.
+
 ### The gate must be able to fail
 
 A green check that cannot go red proves nothing. Therefore, on **every run**, before

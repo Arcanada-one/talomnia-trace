@@ -41,6 +41,15 @@ The gate first proves it can fail — it plants synthetic findings and requires 
 detector layers to go red on them — and only then scans the repository. `main` is
 protected: changes land through pull requests with the gate green.
 
+A pre-push layer of the same gate runs locally, **before** the bytes reach the
+public remote. After cloning, wire it once (covers all worktrees):
+
+```
+git config core.hooksPath .githooks
+```
+
+Details, guarantees and stated limits: [SANITIZATION.md § 2.1](SANITIZATION.md).
+
 ## License
 
 Content is licensed under [CC BY 4.0](LICENSE). Attribution: Talomnia / Arcanada.

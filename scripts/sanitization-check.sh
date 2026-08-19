@@ -134,6 +134,14 @@ case "${1:-}" in
     [ "$rc" = 0 ] && echo "clean: $2"
     exit "$rc" ;;
   '')
+    # Local runs surface a clone operating WITHOUT the pre-push gate (issue #32):
+    # a tree that scans clean but pushes ungated is silently unprotected, and
+    # nothing else would ever say so. CI checkouts are never wired — there the
+    # CI gate itself is the backstop — so the wiring check is skipped exactly
+    # when GITHUB_ACTIONS=true and enforced everywhere else.
+    if [ "${GITHUB_ACTIONS:-}" != "true" ]; then
+      bash "$ROOT/scripts/check-gate-wiring.sh" >/dev/null || exit 1
+    fi
     rc=0
     git -C "$ROOT" ls-files | grep -vE "$EXCLUDED" | scan_files yes "$ROOT" || rc=$?
     [ "$rc" = 0 ] && echo "clean: repository working tree"
