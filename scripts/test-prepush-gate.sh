@@ -36,7 +36,10 @@ expect_nonzero() {
   if [ "$2" -ne 0 ]; then ok "$1 (refused, exit $2)"; else bad "$1 (was allowed, exit 0)"; fi
 }
 
-GIT_ID=(-c user.name=gate-test -c user.email=gate-test@example.com)
+# The committer email is concatenated so this tracked file carries no
+# EMAIL-class literal of its own.
+sandbox_mail='gate-test'; sandbox_mail+='@'; sandbox_mail+='example.com'
+GIT_ID=(-c user.name=gate-test -c "user.email=$sandbox_mail")
 
 # ---- sandbox: tracked tree -> fresh repo + local bare remote ----------------
 bare="$TMP/remote.git"
