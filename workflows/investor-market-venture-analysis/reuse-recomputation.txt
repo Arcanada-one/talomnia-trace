@@ -1,0 +1,31 @@
+==============================================================================
+M1  equal-split across an entry's artifacts, ALL artifacts
+   created  n=824   total=$   695.28  mean=$0.8438
+   reused   n=170   total=$    86.64  mean=$0.5096
+   modified n=249   total=$    75.73
+   create/reuse = 1.656   reuse/create = 0.604   -> reuse is CHEAPER per event
+
+M2  whole-entry cost attributed to each artifact, ALL artifacts
+   created  n=824   total=$  1797.81  mean=$2.1818
+   reused   n=170   total=$   288.67  mean=$1.6981
+   modified n=249   total=$   432.49
+   create/reuse = 1.285   reuse/create = 0.778   -> reuse is CHEAPER per event
+
+M3  equal-split, RESTRICTED to artifacts with >=1 reuse  [the published method]
+   created  n=50    total=$    18.94  mean=$0.3787
+   reused   n=170   total=$    86.64  mean=$0.5096
+   modified n=25    total=$     7.56
+   create/reuse = 0.743   reuse/create = 1.346   -> reuse is MORE EXPENSIVE per event
+
+M4  paired within artifact (artifacts having BOTH a creation and a reuse)
+   pairs n=50
+   mean own-creation=$0.3787  mean own-reuse=$0.5170  create/reuse=0.733
+   median per-artifact create/reuse ratio = 0.568  (n=49)
+   artifacts where reuse was CHEAPER than that artifact's own creation: 15/50
+
+==============================================================================
+DIAGNOSIS of the published M3
+   artifacts with >=1 reuse: 137
+   ...of which also have a recorded creation event: 50
+   ...i.e. 87 reused artifacts have NO creation event in the ledger,
+      so M3's 'created' arm was drawn from only 50 events, not 824.
