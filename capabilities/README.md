@@ -10,6 +10,8 @@ and blueprints. This tree holds their public projections.
 | `competencies/` | What the workforce knows how to do. |
 | `skills/` | Procedural knowledge — how a class of task is executed. |
 | `blueprints/` | Repeatable multi-step work programs. |
+| `constraints/` | Rules the work must hold to, each with the check that enforces it. |
+| `policies/` | Standing decisions about how the work is run. |
 
 Provenance contract:
 
