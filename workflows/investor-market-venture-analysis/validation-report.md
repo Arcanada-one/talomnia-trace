@@ -44,8 +44,16 @@ Gate 7 is the one worth naming twice. The sentence was *correcting* an overstate
 
 ## Reproduction
 
-- Contract: `K_id sha256:f98de211802d8b86faf2e7ab7b1502b3cec2cdadaf749ff367b22497a0014636`
-- Receipt: `sha256:7e1cdc4ab0e1ab52c8aa3f89e8294059361f3c46008289746cef1ffaa90a2de7`
-- Envelope: `sha256:920dac5847042e3e6764145810cef10f9e238d1649dce40a5f800fd0a934a19e`
+- Contract, as issued 2026-08-20: `K_id sha256:f98de211802d8b86faf2e7ab7b1502b3cec2cdadaf749ff367b22497a0014636`
+- Contract, **re-pinned** under the union snapshot on rebase: `K_id sha256:0bf1bed69ba88a9a4883e7d4e2060b4fe16190def0c3b2b4a8c3edff89562c53`
+- Receipt, as issued: `sha256:7e1cdc4ab0e1ab52c8aa3f89e8294059361f3c46008289746cef1ffaa90a2de7`
+- Receipt, re-pinned: `sha256:9744805e8e1877ca1a271b3766b970874de497141686ed0bef941e23f7acae80`
+- Envelope, as issued: `sha256:920dac5847042e3e6764145810cef10f9e238d1649dce40a5f800fd0a934a19e`
+- Envelope, re-pinned: `sha256:bd6edee702a8a7b6ceb2de7007da47f0bf4f6161f394ead1da622870a5547652`
 - State `Unbound` by design; bundle PASS by the TALO-0019 ontology validator.
-- Re-running the resolver against `origin/main` reproduces all three digests identically.
+- Re-running the resolver against `origin/main` at the time of issuance reproduced all three digests
+  identically. After TALO-0067 and TALO-0079 landed, the graph snapshot moved and the contract was
+  re-pinned: **the only field that differs across the entire resolution is `snapshot_digest`** — proposed
+  candidates, alternates, rejections, selection, closure entries, governance and policy events are
+  byte-identical, so the contract selects exactly the same knowledge. Both bundles validate with
+  `HIST_VALID=true`, and both are committed.
