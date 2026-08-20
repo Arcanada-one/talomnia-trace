@@ -31,8 +31,13 @@ The published Workforce Market Research (2026-08-19, 22 entries over 4 tasks) re
 | Ratio (avg creation / avg reuse) | **0.71×** |
 | Reuse share of all dispositions | 160 of 1 098 (14.6 %) |
 
-**Reading:** on the current record a reuse event costs *more* on average than a creation
-event, not one-ninth of it. Two caveats that matter and must travel with the number:
+**SUPERSEDED on rework (talomnia-knowledge#7).** This section computed one estimator and
+read a direction off it. On the current 354-entry snapshot the direction reverses with the
+choice of population — see `reuse-method-note.md`. The correct verdict is that the
+mechanism is unmeasured, not that it fails.
+
+**Original reading, retained for the record:** on the restricted estimator a reuse event
+cost more on average than a creation event, not one-ninth of it. Two caveats that matter and must travel with the number:
 
 1. Cost attribution is an **equal split of an entry's cost across its artefacts**, an
    estimate the tool itself labels as such. An entry that reuses one artefact while doing

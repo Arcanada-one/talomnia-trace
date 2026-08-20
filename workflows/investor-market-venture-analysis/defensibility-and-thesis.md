@@ -14,7 +14,7 @@ design intent. A mechanism that exists only as an idea is graded `Hypothesis` or
 | Governed execution pipeline (contract → resolution receipt → execution → receipt) | **Current** | Contracts issued and validated by an independent ontology validator; this task's own K_id `sha256:f98de211…`, receipt `sha256:7e1cdc4a…`, bundle PASS | Third-party reproduction of a contract from the published receipt |
 | Knowledge Contract as a governance artefact | **Emerging** | Formal model published; resolver runs over a 149-revision graph; contracts refuse issuance on unapproved revisions (demonstrated: this task's own Gap run) | A customer accepting delivery *because of* the contract, not despite it |
 | Capability registry (roles, skills, blueprints) as reusable assets | **Emerging** | 36 agents in this task alone drew on registered skills; a new skill was authored and approved through the expansion blueprint | Measured cost decline per reuse (see below — currently refuted) |
-| **Reuse economics** (create once, reuse cheaply) | **Not demonstrated** | On 284 entries: average creation **$0.3595**, average reuse **$0.5053** → **0.71×**. Reuse currently costs *more* per event than creation. The earlier "≈9× cheaper" figure came from 22 entries and does not survive the larger sample. | An attribution method that separates reuse cost from the surrounding work, then a measured decline |
+| **Reuse economics** (create once, reuse cheaply) | **Not demonstrated** | Snapshot 354 entries (`sha256:4d0b3f5c…`), 824 creations / 170 reuses / 979 artefacts. The ratio reverses with the choice of population: all artefacts gives creation $0.8438 vs reuse $0.5096 (create÷reuse **1.66×**); paired within the same artefact gives $0.3787 vs $0.5170 (**0.73×**, median 0.568, n=50). Neither establishes a direction — see `reuse-method-note.md`. | An attribution method that separates reuse cost from the surrounding work, then a measured decline |
 | Accumulated professional knowledge as a data asset | **Hypothesis** | Graph exists; no evidence it improves outcomes for a *paying* customer | A/B evidence that graph-backed delivery beats ungrounded delivery |
 | Workflow learning across engagements | **Hypothesis** | No cross-engagement learning measurement exists | Repeat-engagement cost or quality delta |
 | Switching costs | **Not demonstrated** | No customer has ever switched to Talomnia, so none has faced a cost to switch away | Contract renewals |
@@ -46,9 +46,9 @@ Comparable outcome: **Endava at ~0.17× revenue, Concentrix ~0.16×, Globant ~0.
 Critical assumption: that delivery quality holds without measured human review.
 
 ### Platform — Workforce as acquisition, capabilities as reusable infrastructure
-Requires the reuse-economics mechanism to work. **It is currently graded Not demonstrated
-and the first-party measurement points the wrong way (0.71×).** This scenario's central
-assumption is the one the evidence currently fails to support.
+Requires the reuse-economics mechanism to work. **It is graded Not demonstrated, and the
+first-party measurement supports neither direction.** This scenario's central assumption is
+the one the evidence cannot currently speak to at all.
 Comparable outcome: LangChain at $1.25B on infrastructure positioning; Glean ~$7.2B.
 
 ### Network / capability economy — a market of professional capabilities
@@ -76,8 +76,9 @@ is being sold to rather than informed.
    revenue), Fiverr −59.6% (~0.8×), Concentrix −48.3% (~0.16×), Globant −43.6%, Upwork
    −41.5%, EPAM −39.6%, all observed 2026-08-19. The exception, Innodata (+71.3%, ~6.8×),
    sells AI **training data**, not AI-delivered professional work.
-3. **Reuse economics — the platform scenario's core mechanism — is not demonstrated and
-   currently measures against itself** (0.71×, above).
+3. **Reuse economics — the platform scenario's core mechanism — is not demonstrated and not
+   measured**: the ratio reverses direction with the choice of population (1.66× vs 0.73×)
+   and the attribution method cannot isolate reuse cost from co-located work.
 4. **Gross margin is unmeasurable from the current instrument.** `human_review_time_s` is
    0 across every ledger entry. Any margin figure derived from this dataset omits human
    cost entirely and is an upper bound, not a margin.
@@ -158,7 +159,7 @@ and the first paid engagement never converts to a second.
 |---|---|---|---|---|
 | EG-1 | First external **paid** engagement delivered and accepted | acceptance = yes/no | Converts every economic figure from self-measurement to evidence | 1 |
 | EG-2 | Measured gross margin **including human review time** | margin % | Directly tests the Emergence threshold; today unmeasurable | ≥50% to survive, ≥70% for software multiples |
-| EG-3 | Reuse cost ratio under an attribution method that isolates reuse | create ÷ reuse | The platform scenario stands or falls here; today 0.71× | >1.5× to be a mechanism at all |
+| EG-3 | Reuse cost ratio under an attribution method that isolates reuse | create ÷ reuse | The platform scenario stands or falls here; today no method establishes a direction | >1.5× to be a mechanism at all |
 | EG-4 | Repeat purchase | 2nd engagement from the same buyer | Distinguishes a product from a favour | ≥1 |
 | EG-5 | Acceptance/rework rate under a customer's criteria | rework % | Today 4.27% but self-graded | test vs. the internal figure |
 | EG-6 | Sales-cycle length | days, first contact → signature | The only input that makes SOM computable | measure, don't target |
@@ -187,14 +188,14 @@ four PwC reports).
 pay, repeat purchase, cross-domain generalisation, switching costs, and every network
 effect.
 
-**What could kill the thesis.** Reuse never compounding (the platform case); margin below
+**What could kill the thesis.** Reuse never compounding (the platform case — today untested rather than tested and failed); margin below
 50% once human review is counted (the whole case); model labs and consulting incumbents
 closing the layer from both sides (both now evidenced with dated transactions).
 
 **Reasons NOT to invest, stated plainly:**
 - there is no revenue, no customer, and no acceptance evidence of any kind;
-- the central economic mechanism is not merely unproven but currently measures against
-  itself;
+- the central economic mechanism is not merely unproven but unmeasured, and the instrument
+  in use cannot measure it;
 - gross margin cannot be computed from the instrument the company itself uses;
 - the public comparables for the realistic outcome are trading at 0.16×–0.8× revenue and
   falling;
