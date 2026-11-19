@@ -49,6 +49,19 @@ is_doc_ip() {
   esac
 }
 
+# Permanent public-surface allowances (not time-limited exceptions).
+# SECURITY.md must publish the ecosystem security contact; that is policy
+# surface, not a reviewed exemption that expires (Root 2026-11-19).
+is_design_allowed() { # path class text -> 0 if allowed by design
+  local path="$1" class="$2" text="$3"
+  if [ "$class" = EMAIL ] && [ "$path" = "SECURITY.md" ]; then
+    if printf '%s' "$text" | grep -qE '(^|[^A-Za-z0-9._%+-])security@arcanada\.ai([^A-Za-z0-9.-]|$)'; then
+      return 0
+    fi
+  fi
+  return 1
+}
+
 allow_suppresses() { # path class -> 0 if a live allowlist entry covers it
   local path="$1" class="$2" today entry_path entry_class entry_expiry rest
   [ -f "$ALLOWLIST" ] || return 1
@@ -81,6 +94,7 @@ scan_files() { # reads file list on stdin (relative to $2), honour_allowlist=$1
           [ -n "$match" ] && is_doc_ip "$match" && continue
         fi
         if [ "$honour" = yes ]; then
+          if is_design_allowed "$f" "$class" "$text"; then continue; fi
           rc=0; allow_suppresses "$f" "$class" || rc=$?
           if [ "$rc" = 0 ]; then continue; fi
           if [ "$rc" = 2 ]; then found=1; continue; fi
