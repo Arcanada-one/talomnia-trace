@@ -23,7 +23,7 @@ ALLOWLIST="$ROOT/.sanitization-allowlist"
 
 # Detector definition files contain the patterns themselves — excluded from the scan,
 # governed by PR review on the protected branch (SANITIZATION.md § 3).
-EXCLUDED='^(scripts/sanitization-check\.sh|\.gitleaks\.infra\.toml|\.sanitization-allowlist)$'
+EXCLUDED='^(scripts/sanitization-check\.sh|scripts/test-security-md-email-by-design\.sh|\.gitleaks\.infra\.toml|\.sanitization-allowlist)$'
 
 CLASSES=(IP4 ABSPATH HOSTNAME EMAIL PHONE TRACKER CRED)
 
