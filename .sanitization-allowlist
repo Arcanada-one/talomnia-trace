@@ -1,4 +1,6 @@
 # Sanitization allowlist — reviewed exceptions (SANITIZATION.md § 3).
 # Format: <path>:<class>:<expiry YYYY-MM-DD>:<justification>
 # An expired entry turns the gate red until renewed by explicit review.
-SECURITY.md:EMAIL:2026-11-17:public security contact address mandated by the ecosystem security policy
+# SECURITY.md Reporting contact is allowed by design in
+# scripts/sanitization-check.sh (is_design_allowed) — do not re-add a
+# time-limited EMAIL exemption for that public security contact.

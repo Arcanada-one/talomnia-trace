@@ -23,7 +23,7 @@ ALLOWLIST="$ROOT/.sanitization-allowlist"
 
 # Detector definition files contain the patterns themselves — excluded from the scan,
 # governed by PR review on the protected branch (SANITIZATION.md § 3).
-EXCLUDED='^(scripts/sanitization-check\.sh|\.gitleaks\.infra\.toml|\.sanitization-allowlist)$'
+EXCLUDED='^(scripts/sanitization-check\.sh|scripts/test-security-md-email-by-design\.sh|\.gitleaks\.infra\.toml|\.sanitization-allowlist)$'
 
 CLASSES=(IP4 ABSPATH HOSTNAME EMAIL PHONE TRACKER CRED)
 
@@ -47,6 +47,19 @@ is_doc_ip() {
     192.0.2.*|198.51.100.*|203.0.113.*) return 0 ;;
     *) return 1 ;;
   esac
+}
+
+# Permanent public-surface allowances (not time-limited exceptions).
+# SECURITY.md must publish the ecosystem security contact; that is policy
+# surface, not a reviewed exemption that expires (Root 2026-11-19).
+is_design_allowed() { # path class text -> 0 if allowed by design
+  local path="$1" class="$2" text="$3"
+  if [ "$class" = EMAIL ] && [ "$path" = "SECURITY.md" ]; then
+    if printf '%s' "$text" | grep -qE '(^|[^A-Za-z0-9._%+-])security@arcanada\.ai([^A-Za-z0-9.-]|$)'; then
+      return 0
+    fi
+  fi
+  return 1
 }
 
 allow_suppresses() { # path class -> 0 if a live allowlist entry covers it
@@ -81,6 +94,7 @@ scan_files() { # reads file list on stdin (relative to $2), honour_allowlist=$1
           [ -n "$match" ] && is_doc_ip "$match" && continue
         fi
         if [ "$honour" = yes ]; then
+          if is_design_allowed "$f" "$class" "$text"; then continue; fi
           rc=0; allow_suppresses "$f" "$class" || rc=$?
           if [ "$rc" = 0 ]; then continue; fi
           if [ "$rc" = 2 ]; then found=1; continue; fi
