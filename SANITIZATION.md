@@ -107,7 +107,9 @@ Two practical notes from proving this gate, kept here so they are not re-learned
 
 ## 3. Exceptions — allowlist discipline
 
-Legitimate exceptions (e.g. the public security contact address in `SECURITY.md`)
+The public security contact address published in `SECURITY.md` (Reporting)
+is allowed **by design** in Layer B (`is_design_allowed`) — it is mandated
+public policy surface, not a time-limited exemption. Other legitimate exceptions
 live in [`.sanitization-allowlist`](.sanitization-allowlist), one entry per line:
 
 ```
@@ -118,6 +120,7 @@ live in [`.sanitization-allowlist`](.sanitization-allowlist), one entry per line
   human-readable justification.
 - An **expired entry turns the gate red** until renewed by an explicit review.
 - The detector definition files (`scripts/sanitization-check.sh`,
+  `scripts/test-security-md-email-by-design.sh`,
   `.gitleaks.infra.toml`, `.sanitization-allowlist`) necessarily contain the
   patterns they detect and are
   excluded from Layer B scanning; they are governed instead by pull-request review on
